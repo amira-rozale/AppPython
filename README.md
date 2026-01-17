@@ -375,11 +375,11 @@ resultat = analyseur.executer_analyse([10, 20, 30, 40, 50])
 
 ##  Auteur
 
-Projet réalisé dans le cadre d'un cours sur les patrons de conception.
+leila et amira
 
 ##  Licence
 
-Ce projet est fourni à des fins éducatives. par leila et amira 
+Ce projet est fourni à des fins éducatives. 
 
 ---
 
