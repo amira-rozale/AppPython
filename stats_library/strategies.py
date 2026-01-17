@@ -28,8 +28,11 @@ class Correlation(MethodeStatistique):
     """Corrélation entre 2 listes de valeurs."""
     def calculer(self, donnees):
         if len(donnees) < 2: return 0
-        x = [d[0] for d in donnees]
-        y = [d[1] for d in donnees]
+        try:
+            x = [d[0] for d in donnees]
+            y = [d[1] for d in donnees]
+        except (TypeError, IndexError):
+            raise ValueError("Les données doivent être des tuples (x, y)")
         n = len(donnees)
 
         sum_x = sum(x)
@@ -47,8 +50,11 @@ class RegressionLineaire(MethodeStatistique):
     """Régression Linéaire (retourne pente, intercept)."""
     def calculer(self, donnees):
         if len(donnees) < 2: return (0,0)
-        x = [d[0] for d in donnees]
-        y = [d[1] for d in donnees]
+        try:
+            x = [d[0] for d in donnees]
+            y = [d[1] for d in donnees]
+        except (TypeError, IndexError):
+            raise ValueError("Les données doivent être des tuples (x, y)")
         n = len(donnees)
 
         sum_x = sum(x)
@@ -75,12 +81,12 @@ class Analyseur:
 
     def executer_analyse(self, donnees):
         if self._methode is None:
-             raise ValueError("Aucune méthode définie")
+            raise ValueError("Aucune méthode définie")
 
         resultat = self._methode.calculer(donnees)
         self._journal.enregistrer(
-                 self._methode.__class__.__name__,
-                 resultat,
-                 status="SUCCES"
-    )
+            self._methode.__class__.__name__,
+            resultat,
+            status="SUCCES"
+        )
         return resultat
