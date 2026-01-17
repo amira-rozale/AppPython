@@ -384,4 +384,4 @@ Ce projet est fourni à des fins éducatives. par leila et amira
 ---
 
 **Version** : 1.0.0  
-**Dernière mise à jour** : 2024
+**Dernière mise à jour** : 2026
