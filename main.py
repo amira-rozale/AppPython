@@ -20,13 +20,31 @@ def charger_donnees(filepath):
             reader = csv.reader(f)
             next(reader, None)  # ignorer en-tête si présent
             for row in reader:
+                # Ignorer les lignes vides
+                if not row or all(not cell.strip() for cell in row):
+                    continue
+                # Traiter les lignes avec données
                 if len(row) >= 2:
-                    donnees.append((float(row[0]), float(row[1])))
-                elif len(row) == 1:
-                    donnees.append(float(row[0]))
+                    try:
+                        donnees.append((float(row[0]), float(row[1])))
+                    except ValueError:
+                        continue  # Ignorer les lignes avec valeurs non numériques
+                elif len(row) == 1 and row[0].strip():
+                    try:
+                        donnees.append(float(row[0]))
+                    except ValueError:
+                        continue  # Ignorer les lignes avec valeurs non numériques
+    except FileNotFoundError:
+        print(f"[ERREUR] Fichier '{filepath}' introuvable.")
+        return None
     except Exception as e:
         print(f"[ERREUR] Problème lors du chargement : {e}")
         return None
+    
+    if not donnees:
+        print("[ERREUR] Aucune donnée valide trouvée dans le fichier.")
+        return None
+    
     return donnees
 
 
@@ -107,8 +125,8 @@ def main():
                 donnees_paires = None
                 print(f"[OK] {len(donnees)} valeurs chargées depuis '{fichier}'")
 
-            print("✔️ Données chargées avec succès.")
-            print("➡️ Vous pouvez maintenant choisir les options 2, 3, 4 ou 5.")
+            print(" Données chargées avec succès.")
+            print(" Vous pouvez maintenant choisir les options 2, 3, 4 ou 5.")
 
         # -------- 2. Choisir méthode --------
         elif choix == "2":
@@ -149,6 +167,12 @@ def main():
 
             except Exception as e:
                 print(f"[ERREUR] {e}")
+                # Enregistrer l'erreur dans le journal
+                journal.enregistrer(
+                    methode.__class__.__name__,
+                    str(e),
+                    status="ECHEC"
+                )
 
         # -------- 3. Afficher données --------
         elif choix == "3":
